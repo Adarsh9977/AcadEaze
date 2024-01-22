@@ -1,10 +1,15 @@
 import User from "../models/UserSchema.js";
 import Mentor from "../models/MentorSchema.js";
 import jwt from "jsonwebtoken";
+import bcrypt from "bcryptjs";
 
-
- const register = async (req, res) => {
-
+ 
+  const generateToken = user=>{
+    return jwt.sign({id: user._id, role:user.role}, process.env.JWT_SECRET_KEY, {
+      expiresIn: '15d',
+    })
+  }
+  const register = async (req, res) => {
   const { email, password, name, role, photo, gender } = req.body;
 
   console.log("name : ", email);
@@ -23,12 +28,14 @@ import jwt from "jsonwebtoken";
     }
 
     // hash password
+    const salt = await bcrypt.genSalt(10);
+    const hashPassword = await bcrypt.hash(password, salt)
 
     if (role === "mentee") {
       user = await  User.create({
         name,
         email,
-        password,
+        password:hashPassword,
         photo,
         gender,
         role,
@@ -39,7 +46,7 @@ import jwt from "jsonwebtoken";
         user = await Mentor.create({
           name,
           email,
-          password,
+          password:hashPassword,
           photo,
           gender,
           role,
