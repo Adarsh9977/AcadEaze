@@ -1,17 +1,20 @@
 import User from "../models/UserSchema.js";
 import Mentor from "../models/MentorSchema.js";
 import jwt from "jsonwebtoken";
-import bcrypt from "bcryptjs";
 
-export const register = async (req, res) => {
+
+ const register = async (req, res) => {
+
   const { email, password, name, role, photo, gender } = req.body;
-  try {
+
+  console.log("name : ", email);
+  
     let user = null;
 
     if (role === "mentee") {
-      user = User.findOne({ email });
+      user = await User.findOne({ email });
     } else if (role === "mentor") {
-      user = Mentor.findOne({ email });
+      user = await Mentor.findOne({ email });
     }
 
     // check if user exist
@@ -20,13 +23,12 @@ export const register = async (req, res) => {
     }
 
     // hash password
-    const salt = await bcrypt.hash(password, salt);
 
     if (role === "mentee") {
-      user = new User({
+      user = await  User.create({
         name,
         email,
-        password: salt,
+        password,
         photo,
         gender,
         role,
@@ -34,21 +36,23 @@ export const register = async (req, res) => {
     }
 
     if (role === "mentor") {
-        user = new Mentor({
+        user = await Mentor.create({
           name,
           email,
-          password: salt,
+          password,
           photo,
           gender,
           role,
         });
-      }
+    }
 
-      await user.save()
-      res.status(200).json({success: true, message: 'User successfully created!!'})
-  } catch (error) {
-    res.status(500).json({success: false, message: 'Internal server error, Try again'})
-  }
+    user = await User.findOne({email});
+
+    if (!user) {
+      return res.status(400).json({success:false, message:"error while registering the user"})
+    }
+    return res.status(200).json({success: true, message: 'User registered successfully!!'})
+  
 };
 
 export const login = async (req, res) => {
@@ -82,3 +86,5 @@ export const login = async (req, res) => {
     return res.status(400).json({success:false, message:error})
   }
 };
+
+export {register}
