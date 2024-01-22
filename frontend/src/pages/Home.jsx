@@ -42,8 +42,9 @@ const Home = () => {
                   diverse pool of mentors, view their profiles, and schedule
                   appointments at your convenience.
                 </p>
-
+               <Link to="/appointment">
                 <button className="btn">Request an Appointment</button>
+                </Link>
               </div>
 
               <div className="mt-[30px] lg:mt-[70px] flex flex-col lg:flex-row lg:items-center gap-5 lg:gap-[30px]">
@@ -248,14 +249,14 @@ const Home = () => {
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-[6px] lg:gap-3">
                   <p
-                    className="text-[10px] leading-[10px] lg:text-[14px] lg: leading-5 text-headingColor 
+                    className="text-[10px]leading-[10px] lg:text-[14px] lg: leading-5 text-headingColor 
                   font-[600]"
                   >
                     Tue, 24
                   </p>
 
                   <p
-                    className="text-[10px] leading-[10px] lg:text-[14px] lg: leading-5 text-textColor 
+                    className="text-[10px]leading-[10px] lg:text-[14px] lg: leading-5 text-textColor 
                   font-[400]"
                   >
                     10:00AM

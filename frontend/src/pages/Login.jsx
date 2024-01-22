@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import {Link} from 'react-router-dom'
 
@@ -48,7 +49,7 @@ const Login = () => {
           </div>
 
           <div className="mt-7">
-            <button
+            <button 
               type="submit"
               className="w-full bg-primaryColor text-white 
             text-[18px] leading-[30px] rounded-lg px-4 py-3"

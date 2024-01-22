@@ -1,6 +1,6 @@
 import Home from "../pages/Home"
 import About from "../pages/About"
-
+import Appointment from "../pages/Appointment"
 
 import Pages from "../pages/Pages"
 import Blog from "../pages/Blog"
@@ -19,7 +19,7 @@ const Routers = () => {
       <Route path="/" element={<Home />} />
       <Route path="/home" element={<Home />} />
       <Route path="/about" element={<About />} />
-      
+      <Route path= "/appointment" element={<Appointment/>}/>
       <Route path="/pages" element={<Pages />} />
       <Route path="/blog" element={<Blog />} />
       <Route path="/mentors" element={<Mentors />} />
