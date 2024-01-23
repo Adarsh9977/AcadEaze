@@ -17,51 +17,52 @@ const generateToken = user=>{
 
   // console.log("name : ", email);
   
-    let user = null;
-
-    if (role === "mentee") {
-      user = await User.findOne({ email });
-    } else if (role === "mentor") {
-      user = await Mentor.findOne({ email });
-    }
-
-    // check if user exist
-    if (user) {
-      return res.status(400).json({ message: "User already exist" });
-    }
-
-    // hash password
-    const salt = await bcrypt.hash(password, salt);
-
-    if (role === "mentee") {
-      user = await  User.create({
-        name,
-        email,
-        password: salt,
-        photo,
-        gender,
-        role,
-      });
-    }
-
-    if (role === "mentor") {
-        user = await Mentor.create({
+    try {
+      let user = null;
+  
+      if (role === "mentee") {
+        user = await User.findOne({ email });
+      } else if (role === "mentor") {
+        user = await Mentor.findOne({ email });
+      }
+  
+      // check if user exist
+      if (user) {
+        return res.status(400).json({ message: "User already exist" });
+      }
+  
+      // hash password
+      const salt = await bcrypt.genSalt(10);
+      const hashPassword = await bcrypt.hash(password, salt);
+  
+      if (role === "mentee") {
+        user = new User({
           name,
           email,
-          password: salt,
+          password: hashPassword,
           photo,
           gender,
           role,
         });
+      }
+  
+      if (role === "mentor") {
+          user = new Mentor({
+            name,
+            email,
+            password: hashPassword,
+            photo,
+            gender,
+            role,
+          });
+      }
+  
+      user = await user.save();
+      res.status(200).json({success: true, message: 'User successfully created!!'})
+  
+    } catch (error) {
+      res.status(500).json({success: false, message: 'Internal server error, Try again'})
     }
-
-    user = await User.findOne({email});
-
-    if (!user) {
-      return res.status(400).json({success:false, message:"error while registering the user"})
-    }
-    
-    return res.status(200).json({success: true, message: 'User registered successfully!!'})
   
 };
 
@@ -78,7 +79,7 @@ export const login = async (req, res) => {
       user = mentee
     }
 
-    if(menor){
+    if(mentor){
       user = mentor
     }
 
